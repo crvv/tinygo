@@ -3096,7 +3096,11 @@ func (c *Compiler) ApplyFunctionSections() {
 	for !llvmFn.IsNil() {
 		if !llvmFn.IsDeclaration() {
 			name := llvmFn.Name()
-			llvmFn.SetSection(".text." + name)
+			if c.GOOS == "darwin" {
+				llvmFn.SetSection("__TEXT,__text")
+			} else {
+				llvmFn.SetSection(".text." + name)
+			}
 		}
 		llvmFn = llvm.NextFunction(llvmFn)
 	}
