@@ -549,21 +549,20 @@ func main() {
 
 	switch command {
 	case "build":
-		if *outpath == "" {
-			fmt.Fprintln(os.Stderr, "No output filename supplied (-o).")
-			usage()
-			os.Exit(1)
-		}
 		if flag.NArg() != 1 {
 			fmt.Fprintln(os.Stderr, "No package specified.")
 			usage()
 			os.Exit(1)
 		}
+		pkgName := flag.Arg(0)
+		if *outpath == "" {
+			*outpath = filepath.Base(pkgName)
+		}
 		target := *target
 		if target == "" && filepath.Ext(*outpath) == ".wasm" {
 			target = "wasm"
 		}
-		err := Build(flag.Arg(0), *outpath, target, config)
+		err := Build(pkgName, *outpath, target, config)
 		handleCompilerError(err)
 	case "flash", "gdb":
 		if *outpath != "" {
