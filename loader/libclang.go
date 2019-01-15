@@ -59,8 +59,17 @@ func (info *fileInfo) parseFragment(fragment string, cflags []string) error {
 	}
 	defer C.clang_disposeTranslationUnit(unit)
 
-	if C.clang_getNumDiagnostics(unit) != 0 {
-		return errors.New("cgo: libclang cannot parse fragment")
+	numErr := C.clang_getNumDiagnostics(unit)
+	if numErr > 0 {
+		errs := make([]error, numErr)
+		for i := range errs {
+			d := C.clang_getDiagnostic(unit, C.uint(i))
+			dstr := C.clang_formatDiagnostic(d, C.CXDiagnostic_DisplaySourceLocation|C.CXDiagnostic_DisplayOption)
+			msg := C.GoString(C.clang_getCString(dstr))
+			println(msg)
+			errs[i] = errors.New(msg)
+		}
+		//return Errors{"cgo: libclang cannot parse fragment", errs}
 	}
 
 	if globalFileInfo != nil {

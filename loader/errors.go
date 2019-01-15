@@ -3,7 +3,7 @@ package loader
 // Errors contains a list of parser errors or a list of typechecker errors for
 // the given package.
 type Errors struct {
-	Pkg  *Package
+	Pkg  string
 	Errs []error
 }
 

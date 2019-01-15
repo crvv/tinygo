@@ -261,7 +261,7 @@ func (p *Package) Check() error {
 		if err, ok := err.(Errors); ok {
 			return err
 		}
-		return Errors{p, typeErrors}
+		return Errors{p.ImportPath, typeErrors}
 	}
 	p.Pkg = typesPkg
 	return nil
@@ -299,7 +299,7 @@ func (p *Package) parseFiles() ([]*ast.File, error) {
 		files = append(files, f)
 	}
 	if len(fileErrs) != 0 {
-		return nil, Errors{p, fileErrs}
+		return nil, Errors{p.ImportPath, fileErrs}
 	}
 	return files, nil
 }
