@@ -9,8 +9,10 @@ import (
 )
 
 /*
-#cgo CFLAGS: -I/usr/lib/llvm-7/include
-#cgo LDFLAGS: -L/usr/lib/llvm-7/lib -lclang
+#cgo linux CFLAGS: -I/usr/lib/llvm-7/include
+#cgo linux LDFLAGS: -L/usr/lib/llvm-7/lib -lclang
+#cgo darwin CFLAGS: -I/usr/local/opt/llvm/include
+#cgo darwin LDFLAGS: -L/usr/local/opt/llvm/lib -lclang
 #include <clang-c/Index.h> // if this fails, install libclang-7-dev
 #include <stdlib.h>
 
